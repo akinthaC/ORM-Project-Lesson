@@ -77,7 +77,7 @@ public class CustomerFormController {
             System.out.println(isSaved);
             if (isSaved) {
                 System.out.println(isSaved);
-                new Alert(Alert.AlertType.CONFIRMATION, "Coustomer saved!!!.").show();
+                new Alert(Alert.AlertType.CONFIRMATION, "Customer saved!!!.").show();
                 setCellValueFactory();
                 loadAllCustomers();
                 clearFields();
@@ -86,6 +86,75 @@ public class CustomerFormController {
         } catch (SQLException | ClassNotFoundException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }
+    }
+
+    @FXML
+    void searchBy(ActionEvent event) throws SQLException, ClassNotFoundException {
+        String id = txtCusId.getText();
+
+        CustomerDTO customer = customerBo.CusSearchById(id);
+        if (customer != null) {
+            txtCusId.setText(customer.getId());
+            txtCusName.setText(customer.getName());
+            txtCusAddress.setText(customer.getAddress());
+            txtCusTel.setText(customer.getTel());
+
+
+        } else {
+            new Alert(Alert.AlertType.INFORMATION, "customer not found!").show();
+        }
+    }
+
+    @FXML
+    void btnDeleteOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
+
+        if (txtCusId.getText() == null) {
+            new Alert(Alert.AlertType.ERROR, "Id column is empty Please enter a valid ID!").show();
+            return;
+        }
+        String id=txtCusId.getText();
+        String name = txtCusName.getText();
+        String address = txtCusAddress.getText();
+        String tel = txtCusTel.getText();
+
+        CustomerDTO customer = new CustomerDTO(id, name, address, tel);
+
+        boolean isDelete = customerBo.deleteCustomer((customer));
+
+        if (isDelete) {
+            new Alert(Alert.AlertType.CONFIRMATION, "Customer deleted!!!.").show();
+            setCellValueFactory();
+            loadAllCustomers();
+            clearFields();
+            getCurrentOrderId();
+        }
+
+    }
+    @FXML
+    void btnUpdateOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
+        if (txtCusId.getText() == null || txtCusName.getText() ==null) {
+            new Alert(Alert.AlertType.ERROR, "Id column is empty Please enter a valid ID!").show();
+            return;
+        }
+        String id=txtCusId.getText();
+        String name = txtCusName.getText();
+        String address = txtCusAddress.getText();
+        String tel = txtCusTel.getText();
+
+        CustomerDTO customer = new CustomerDTO(id, name, address, tel);
+
+        boolean isUpdated = customerBo.upadteCustomer((customer));
+
+        if (isUpdated) {
+            new Alert(Alert.AlertType.CONFIRMATION, "Customer Updated!!!.").show();
+            setCellValueFactory();
+            loadAllCustomers();
+            clearFields();
+            getCurrentOrderId();
+        }else {
+            new Alert(Alert.AlertType.ERROR, "Customer not updated!!!").show();
+        }
+
     }
 
     private void clearFields() {
@@ -107,19 +176,6 @@ public class CustomerFormController {
         }
     }
 
-    private String generateNextOrderId(String currentId) {
-        if(currentId != null) {
-
-            String[] split = currentId.split("[cC]+");
-
-            int idNum = Integer.parseInt(split[1]);
-
-            return "C" + String.format("%03d", ++idNum);
-
-        }
-
-        return "C001";
-    }
 
     private void loadAllCustomers() {
         ObservableList<CustomerTm> obList = FXCollections.observableArrayList();

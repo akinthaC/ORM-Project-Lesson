@@ -1,5 +1,6 @@
 package lk.ijse.dao.custom.impl;
 
+import javafx.scene.control.Alert;
 import lk.ijse.Entity.Customer;
 import lk.ijse.confit.FactoryConfiguration;
 import lk.ijse.dao.SuperDao;
@@ -7,6 +8,7 @@ import lk.ijse.dao.custom.CustomerDao;
 import lk.ijse.dto.CustomerDTO;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -33,13 +35,51 @@ public class CustomerDaoImpl implements CustomerDao {
     }
 
     public boolean update(Customer DTO) throws SQLException, ClassNotFoundException {
+        Session session = FactoryConfiguration.getInstance().getSession();
+        Transaction transaction = session.beginTransaction();
+
+        session.update(DTO);
+
+        transaction.commit();
+        session.close();
+        System.out.println(transaction.getStatus());
+        if (transaction.getStatus().toString().equals("COMMITTED")){
+            return true;
+        }
         return false;
     }
 
     @Override
-    public boolean delete(String id) throws SQLException, ClassNotFoundException {
+    public boolean delete(Customer DTO) throws SQLException, ClassNotFoundException {
+        Session session = FactoryConfiguration.getInstance().getSession();
+        Transaction transaction = session.beginTransaction();
+
+        session.delete(DTO);
+
+        transaction.commit();
+        session.close();
+        System.out.println(transaction.getStatus());
+        if (transaction.getStatus().toString().equals("COMMITTED")){
+            return true;
+        }
         return false;
     }
+
+    @Override
+    public Customer searchById(String id) throws SQLException, ClassNotFoundException {
+        Session session = FactoryConfiguration.getInstance().getSession();
+        Transaction transaction = session.beginTransaction();
+
+        Query<Customer> query = session.createQuery("FROM Customer WHERE id = :id", Customer.class);
+        query.setParameter("id", id);
+        Customer customer = query.uniqueResult();
+
+        transaction.commit();
+        session.close();
+
+        return customer;
+    }
+
     @Override
     public List<Customer> getAll() throws SQLException, ClassNotFoundException {
         Session session = FactoryConfiguration.getInstance().getSession();

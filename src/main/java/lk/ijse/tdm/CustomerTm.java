@@ -1,10 +1,6 @@
 package lk.ijse.tdm;
 
 
-import lombok.Data;
-import lombok.ToString;
-
-
 public class CustomerTm {
 
     private String id;
@@ -12,8 +8,7 @@ public class CustomerTm {
     private String address;
     private String tel;
 
-    public CustomerTm() {
-    }
+
 
     public CustomerTm(String id, String name, String address, String tel) {
         this.id = id;

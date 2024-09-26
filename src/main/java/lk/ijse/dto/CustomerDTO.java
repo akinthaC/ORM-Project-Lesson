@@ -1,5 +1,9 @@
 package lk.ijse.dto;
 
+import lk.ijse.Entity.Customer;
+import lombok.Data;
+
+
 public class CustomerDTO {
 
     private String id;
@@ -9,6 +13,8 @@ public class CustomerDTO {
 
     public CustomerDTO() {
     }
+
+
 
     public CustomerDTO(String id, String name, String address, String tel) {
         this.id = id;

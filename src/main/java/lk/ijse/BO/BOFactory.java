@@ -2,6 +2,7 @@ package lk.ijse.BO;
 
 
 import lk.ijse.BO.custom.impl.CustomerBoImpl;
+import lk.ijse.BO.custom.impl.ItemBoImpl;
 
 public class BOFactory {
     private static BOFactory boFactory;
@@ -13,12 +14,15 @@ public class BOFactory {
     }
 
     public enum BOType{
-        CUSTOMER
+        CUSTOMER,Item
     }
     public SuperBo GetBo(BOType boType){
         switch (boType) {
             case CUSTOMER:
                 return new CustomerBoImpl();
+
+            case Item:
+                return new ItemBoImpl();
 
             default:
                 return null;

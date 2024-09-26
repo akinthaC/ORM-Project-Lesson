@@ -1,6 +1,7 @@
 
 package lk.ijse.BO.custom.impl;
 
+import javafx.scene.control.Alert;
 import lk.ijse.BO.custom.CustomerBo;
 import lk.ijse.Entity.Customer;
 import lk.ijse.dao.DAOFactory;
@@ -40,4 +41,24 @@ public class CustomerBoImpl implements CustomerBo {
     public String getCurrentId() throws SQLException, ClassNotFoundException {
         return customerDao.getCurrentId();
     }
+
+    @Override
+    public boolean deleteCustomer(CustomerDTO customer) throws SQLException, ClassNotFoundException {
+        return customerDao.delete(new Customer(customer.getId(),customer.getName(),customer.getAddress(),customer.getTel()));
+    }
+
+    @Override
+    public boolean upadteCustomer(CustomerDTO customer) throws SQLException, ClassNotFoundException {
+        return customerDao.update(new Customer(customer.getId(),customer.getName(),customer.getAddress(),customer.getTel()));
+
+    }
+
+    @Override
+    public CustomerDTO CusSearchById(String id) throws SQLException, ClassNotFoundException {
+        Customer customer= customerDao.searchById(id);
+        return new CustomerDTO( customer.getId(),customer.getName(),customer.getAddress(),customer.getTel());
+
+    }
+
+
 }

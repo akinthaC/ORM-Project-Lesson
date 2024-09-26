@@ -54,13 +54,5 @@ public class Customer {
         this.tel = tel;
     }
 
-    @Override
-    public String toString() {
-        return "Customer{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", address='" + address + '\'' +
-                ", tel='" + tel + '\'' +
-                '}';
-    }
+
 }
